@@ -1,0 +1,60 @@
+package com.example.zalo_manager.controller;
+
+import com.example.zalo_manager.entity.User;
+import com.example.zalo_manager.model.dto.UserDto;
+import com.example.zalo_manager.model.request.ChangePasswordReq;
+import com.example.zalo_manager.model.request.ChangeRoleReq;
+import com.example.zalo_manager.model.request.LoginReq;
+import com.example.zalo_manager.model.response.BaseResponse;
+import com.example.zalo_manager.service.BaseService;
+import com.example.zalo_manager.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@CrossOrigin
+@RestController
+@RequestMapping("user")
+public class UserController extends BaseController<User, UserDto>{
+    @Autowired
+    UserService userService;
+
+    public UserController() {
+        super(UserDto.class);
+    }
+
+    @Override
+    protected BaseService<User> getService() {
+        return userService;
+    }
+
+    @PostMapping("/create")
+    public BaseResponse create(@RequestBody User t) throws Exception {
+        return userService.register(t);
+    }
+
+    @PostMapping("/login")
+    public BaseResponse login(@RequestBody LoginReq req) throws Exception {
+        return userService.login(req);
+    }
+
+    @PostMapping("/change-role")
+    public BaseResponse changeRole(@RequestBody ChangeRoleReq req) throws Exception {
+        return userService.changeRole(req);
+    }
+
+    @PostMapping("/change-password")
+    public BaseResponse changePassword(@RequestBody ChangePasswordReq req) throws Exception {
+        return userService.changePassword(req);
+    }
+
+    @GetMapping("/lock")
+    public BaseResponse lock(@RequestParam Long id) throws Exception {
+        return userService.lockUser(id);
+    }
+
+    @GetMapping("/unlock")
+    public BaseResponse unlock(@RequestParam Long id) throws Exception {
+        return userService.unlockUser(id);
+    }
+}
+
