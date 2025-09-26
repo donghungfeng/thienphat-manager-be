@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import jakarta.persistence.criteria.*;
+
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +61,9 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
                 if (argument instanceof ZonedDateTime)
                     return builder.greaterThan(root.get(property).as(ZonedDateTime.class),
                             (ZonedDateTime) argument);
+                if (argument instanceof LocalDate)
+                    return builder.greaterThan(root.get(property).as(LocalDate.class),
+                            (LocalDate) argument);
                 return builder.greaterThan(propertyExpression,
                         argument.toString());
 
@@ -66,6 +71,9 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
                 if (argument instanceof ZonedDateTime)
                     return builder.greaterThanOrEqualTo(root.get(property).as(ZonedDateTime.class),
                             (ZonedDateTime) argument);
+                if (argument instanceof LocalDate)
+                    return builder.greaterThanOrEqualTo(root.get(property).as(LocalDate.class),
+                            (LocalDate) argument);
                 return builder.greaterThanOrEqualTo(propertyExpression,
                         argument.toString());
 
@@ -73,6 +81,9 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
                 if (argument instanceof ZonedDateTime)
                     return builder.lessThan(root.get(property).as(ZonedDateTime.class),
                             (ZonedDateTime) argument);
+                if (argument instanceof LocalDate)
+                    return builder.lessThan(root.get(property).as(LocalDate.class),
+                            (LocalDate) argument);
                 return builder.lessThan(propertyExpression,
                         argument.toString());
 
@@ -80,6 +91,9 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
                 if (argument instanceof ZonedDateTime)
                     return builder.lessThanOrEqualTo(root.get(property).as(ZonedDateTime.class),
                             (ZonedDateTime) argument);
+                if (argument instanceof LocalDate)
+                    return builder.lessThanOrEqualTo(root.get(property).as(LocalDate.class),
+                            (LocalDate) argument);
                 return builder.lessThanOrEqualTo(propertyExpression,
                         argument.toString());
             case IN:
@@ -136,6 +150,8 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
             if (type.equals(Integer.class)) return Integer.parseInt(arg);
             else if (type.equals(Long.class)) return Long.parseLong(arg);
             else if (type.equals(Byte.class)) return Byte.parseByte(arg);
+            else if (type.equals(LocalDate.class)) return LocalDate.parse(arg);
+            // ✅ thêm dòng này
             else return arg;
         }).collect(Collectors.toList());
     }

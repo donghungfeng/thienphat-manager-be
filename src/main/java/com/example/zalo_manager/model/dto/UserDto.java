@@ -17,4 +17,5 @@ public class UserDto {
     private String address;
     //    private int isActive;
     private int status;
+
 }

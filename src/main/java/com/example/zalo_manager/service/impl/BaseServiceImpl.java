@@ -6,8 +6,6 @@ import com.example.zalo_manager.model.request.SearchReq;
 import com.example.zalo_manager.query.CustomRsqlVisitor;
 import com.example.zalo_manager.repository.BaseRepository;
 import com.example.zalo_manager.service.BaseService;
-import com.example.zalo_manager.util.DateUtil;
-import com.example.zalo_manager.util.MapperUtil;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import org.springframework.data.domain.Page;
@@ -51,21 +49,6 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
                 PageRequest.of(req.getPage(), req.getSize(), direction, sortList[0])
                 :
                 Pageable.unpaged();
-    }
-
-    @Override
-    public T create(T t) throws Exception {
-        t.setIsActive(STATUS.ACTIVE);
-        t.setCreateDate(DateUtil.getCurrenDateTime());
-        return this.getRepository().save(t);
-    }
-
-    @Override
-    public T update(T t) throws Exception {
-        T entityMy = this.getRepository().findAllById(t.getId());
-        MapperUtil.mapValue(t, entityMy);
-        t.setUpdateDate(DateUtil.getCurrenDateTime());
-        return getRepository().save(entityMy);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.example.zalo_manager.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,13 +17,13 @@ public class User extends BaseEntity{
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column()
+    @Column(nullable = false)
     private String password;
 
-    @Column()
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column()
+    @Column(nullable = false)
     private String role;
 
     @Column()

@@ -20,11 +20,6 @@ public abstract class BaseController<T extends BaseEntity, U> {
 
     protected abstract BaseService<T> getService();
 
-    @PostMapping("/create")
-    public BaseResponse create(@RequestBody T t) throws Exception {
-        return new BaseResponse(200, "Tạo thành công!", MapperUtil.map(this.getService().create(t), dtoClass));
-    }
-
     @GetMapping("/search")
 //    @PreAuthorize("@appAuthorizer.authorize(authentication, 'VIEW', this)")
     public BaseResponse search(SearchReq req) {
@@ -41,20 +36,15 @@ public abstract class BaseController<T extends BaseEntity, U> {
     }
 
     @GetMapping("/get-all")
-    public BaseResponse getAll(@RequestParam(value = "id") Long id) throws Exception {
+    public BaseResponse getAll() throws Exception {
         return new BaseResponse(200, "Lấy dữ liệu thành công!", MapperUtil.mapEntityListIntoDtoPage(this.getService().getByActive(), dtoClass));
-    }
-
-    @PutMapping("/update")
-    public BaseResponse update(@RequestBody T t) throws Exception {
-        return new BaseResponse(200, "Cập nhật thành công!", MapperUtil.map(this.getService().update(t), dtoClass));
     }
 
 
     @DeleteMapping("/delete")
     public BaseResponse deleteById(@RequestParam(name = "id") Long id) {
         this.getService().delete(id);
-        return new BaseResponse(200, "Xóa thành công!");
+        return new BaseResponse(200, "Xóa thành công!", null);
     }
 
 }

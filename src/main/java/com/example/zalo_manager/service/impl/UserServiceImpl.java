@@ -12,7 +12,6 @@ import com.example.zalo_manager.model.response.LoginRes;
 import com.example.zalo_manager.repository.BaseRepository;
 import com.example.zalo_manager.repository.UserRepository;
 import com.example.zalo_manager.service.UserService;
-import com.example.zalo_manager.util.DateUtil;
 import com.example.zalo_manager.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,9 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
@@ -84,11 +80,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
             if (userRepository.findAllByUsername(user.getUsername()).isPresent()) {
                 return new BaseResponse().fail("Tài khoản đã tồn tại");
             }
-            user.setCreateDate(DateUtil.getCurrenDateTime());
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRole("user");
             user.setStatus(1);
-            result = super.create(user);
+            result = this.create(user);
             return new BaseResponse().success(MapperUtil.map(result, UserDto.class));
         }catch (Exception e){
             return new BaseResponse(500, "Có lỗi xảy ra khi tạo tài khoản", null);
@@ -144,11 +139,13 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return new BaseResponse().success("Mở Khóa tài khoản thành công!");
     }
 
-    @Override
+    public User create(User user) throws Exception {
+        return this.getRepository().save(user);
+    }
+
     public User update(User t) throws Exception {
         User entityMy = this.getRepository().findAllById(t.getId());
         MapperUtil.mapValue(t, entityMy);
-        t.setUpdateDate(DateUtil.getCurrenDateTime());
 //        entityMy.setPassword(passwordEncoder.encode(t.getPassword()));
         return getRepository().save(entityMy);
     }

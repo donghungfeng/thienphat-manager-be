@@ -14,16 +14,11 @@ public class BaseResponse {
     private String message;
     private Object result;
 
-    public BaseResponse(int statusCode, String status) {
-        this.code = statusCode;
-        this.message = status;
+    public static BaseResponse success() {
+        return success(null);
     }
 
-    public BaseResponse success() {
-        return this.success(null);
-    }
-
-    public BaseResponse success(Object result) {
+    public static BaseResponse success(Object result) {
         return BaseResponse.builder()
                 .code(200)
                 .message("Thành công!")
@@ -31,10 +26,30 @@ public class BaseResponse {
                 .build();
     }
 
-    public BaseResponse fail(Object result) {
+    public static BaseResponse success(Object result, int code, String message) {
+        return BaseResponse.builder()
+                .code(code)
+                .message(message)
+                .result(result)
+                .build();
+    }
+
+    public static BaseResponse fail() {
+        return fail(null);
+    }
+
+    public static BaseResponse fail(Object result) {
         return BaseResponse.builder()
                 .code(500)
                 .message("Thất bại!")
+                .result(result)
+                .build();
+    }
+
+    public static BaseResponse fail(Object result, int code, String message) {
+        return BaseResponse.builder()
+                .code(code)
+                .message(message)
                 .result(result)
                 .build();
     }

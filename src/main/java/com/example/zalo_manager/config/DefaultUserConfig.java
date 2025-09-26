@@ -17,6 +17,7 @@ public class DefaultUserConfig {
             if (userRepository.findAllByUsername("hnhy01").isEmpty()) {
                 User admin = new User();
                 admin.setUsername("hnhy01");
+                admin.setFullName("NamKimBum");
                 admin.setPassword(passwordEncoder.encode("123456")); // mã hoá trước khi lưu
                 admin.setIsActive(1);
                 admin.setStatus(1);

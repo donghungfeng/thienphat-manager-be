@@ -17,4 +17,5 @@ public class LoginRes {
     public String address;
     public String id;
     public String role;
+    public Long departmentId;
 }
