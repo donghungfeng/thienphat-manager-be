@@ -46,6 +46,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/user/create").permitAll()
                         // cho phép OPTIONS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/v3/api-docs", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         // tất cả request khác cần authentication
                         .anyRequest().authenticated()
                 )

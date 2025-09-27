@@ -56,10 +56,6 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
         return companyRepository.existsByPhone(phone);
     }
 
-    public Company findById(Long id) {
-        return companyRepository.findAllById(id);
-    }
-
     private String createValid(CompanyCreateReq req) {
         if (req.getName() != null && this.existsByName(req.getName())) return  "Tên công ty ";
         if (req.getTaxCode() != null && this.existsByTaxCode(req.getTaxCode())) return "MST Công ty ";
@@ -68,9 +64,9 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
     }
 
     private String updateValid(CompanyUpdateReq req) {
-        if (req.getName() != null && this.existsByName(req.getName())) return  "Tên công ty ";
-        if (req.getTaxCode() != null && this.existsByTaxCode(req.getTaxCode())) return "MST Công ty ";
-        if (req.getPhone() != null && this.existsByPhone(req.getPhone())) return "SDT Công ty ";
+        if (req.getName() != null && companyRepository.existsByNameAndIdNot(req.getName(), req.getId())) return  "Tên công ty ";
+        if (req.getTaxCode() != null && companyRepository.existsByTaxCodeAndIdNot(req.getTaxCode(), req.getId())) return "MST Công ty ";
+        if (req.getPhone() != null && companyRepository.existsByPhoneAndIdNot(req.getPhone(), req.getId())) return "SDT Công ty ";
         return "";
     }
 }

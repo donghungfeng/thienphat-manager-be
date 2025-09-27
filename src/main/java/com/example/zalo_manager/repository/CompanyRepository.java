@@ -9,4 +9,8 @@ public interface CompanyRepository extends BaseRepository<Company> {
     boolean existsByTaxCode(String taxCode);
     boolean existsByAddress(String address);
     boolean existsByPhone(String phone);
+
+    boolean existsByNameAndIdNot(String name, Long id);
+    boolean existsByTaxCodeAndIdNot(String taxCode, Long id);
+    boolean existsByPhoneAndIdNot(String phone, Long id);
 }

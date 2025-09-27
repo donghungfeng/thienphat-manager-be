@@ -44,7 +44,7 @@ public class DepartmentServiceImpl extends BaseServiceImpl<Department> implement
                 .name(req.getName())
                 .company(company)
                 .build();
-        return BaseResponse.success(department);
+        return BaseResponse.success(departmentRepository.save(department));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class DepartmentServiceImpl extends BaseServiceImpl<Department> implement
         if (company == null){
             return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Công ty không tồn tại");
         }
-        if (departmentRepository.existsByNameAndCompany(req.getName(), company)){
+        if (departmentRepository.existsByNameAndCompanyAndIdNot (req.getName(), company, req.getId())){
             return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Phòng ban thuộc công ty đã tồn tại");
         }
         department.setName(req.getName());

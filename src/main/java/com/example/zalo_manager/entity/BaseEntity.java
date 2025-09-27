@@ -27,7 +27,7 @@ public class BaseEntity {
     private Long id;
 
     @Column(name = "is_active")
-    private Integer isActive;
+    private Integer isActive = 1;
 
     @CreatedDate
     @Column(name = "created_date", updatable = false)

@@ -1,12 +1,14 @@
 package com.example.zalo_manager.model.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
 public class CompanyUpdateReq {
-    @NotBlank(message = "Id công ty không đượd để trống")
+    @NotNull(message = "Id không được để trống")
+    @Positive(message = "Id phải là số dương")
     private Long id;
     private String name;
     private String taxCode;
