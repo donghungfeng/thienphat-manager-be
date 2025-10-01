@@ -52,7 +52,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     }
 
     @Override
-    public T getById(Long id) throws Exception {
+    public T getById(Long id){
         T t = this.getRepository().findAllByIdAndIsActive(id,1);
         return t;
     }

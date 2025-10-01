@@ -10,6 +10,7 @@ import com.example.zalo_manager.repository.CompanyRepository;
 import com.example.zalo_manager.repository.DepartmentRepository;
 import com.example.zalo_manager.service.CompanyService;
 import com.example.zalo_manager.service.DepartmentService;
+import com.example.zalo_manager.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,17 +33,11 @@ public class DepartmentServiceImpl extends BaseServiceImpl<Department> implement
 
     @Override
     public BaseResponse create(DepartmentCreateReq req) {
-        Company company = companyRepository.findAllByIdAndIsActive(req.getCompanyId(), 1);
-        if (company == null){
-            return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Công ty không tồn tại");
-        }
-        if (departmentRepository.existsByNameAndCompany(req.getName(), company)){
-            return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Phòng ban thuộc công ty đã tồn tại");
-        }
         Department department = Department
                 .builder()
                 .name(req.getName())
-                .company(company)
+                .longtitude(req.getLongtitude())
+                .latitude(req.getLatitude())
                 .build();
         return BaseResponse.success(departmentRepository.save(department));
     }
@@ -53,15 +48,6 @@ public class DepartmentServiceImpl extends BaseServiceImpl<Department> implement
         if (department == null){
             return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Phòng ban không tồn tại");
         }
-        Company company = companyRepository.findAllByIdAndIsActive(req.getCompanyId(), 1);
-        if (company == null){
-            return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Công ty không tồn tại");
-        }
-        if (departmentRepository.existsByNameAndCompanyAndIdNot (req.getName(), company, req.getId())){
-            return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Phòng ban thuộc công ty đã tồn tại");
-        }
-        department.setName(req.getName());
-        department.setCompany(company);
-        return BaseResponse.success(departmentRepository.save(department));
+        return BaseResponse.success(departmentRepository.save(MapperUtil.mapValue(req, department)));
     }
 }

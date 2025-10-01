@@ -2,18 +2,22 @@ package com.example.zalo_manager.service.impl;
 
 import com.example.zalo_manager.config.jwt.CustomUserDetails;
 import com.example.zalo_manager.config.jwt.JwtTokenProvider;
+import com.example.zalo_manager.entity.Department;
 import com.example.zalo_manager.entity.User;
 import com.example.zalo_manager.model.dto.UserDto;
 import com.example.zalo_manager.model.request.ChangePasswordReq;
 import com.example.zalo_manager.model.request.ChangeRoleReq;
 import com.example.zalo_manager.model.request.LoginReq;
+import com.example.zalo_manager.model.request.UserUpdateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.model.response.LoginRes;
 import com.example.zalo_manager.repository.BaseRepository;
+import com.example.zalo_manager.repository.DepartmentRepository;
 import com.example.zalo_manager.repository.UserRepository;
 import com.example.zalo_manager.service.UserService;
 import com.example.zalo_manager.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +33,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    DepartmentRepository departmentRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -137,6 +144,22 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         user.setStatus(1);
         userRepository.save(user);
         return new BaseResponse().success("Mở Khóa tài khoản thành công!");
+    }
+
+    @Override
+    public BaseResponse update(UserUpdateReq req) throws Exception {
+        User user = userRepository.findAllByIdAndIsActive(req.getId(), 1);
+        if (user == null){
+            return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "User không tồn tại");
+        }
+        if (req.getDepartmentId() != null){
+            Department department = departmentRepository.findAllByIdAndIsActive(req.getDepartmentId(), 1);
+            if (department == null){
+                return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Phòng ban không tồn tại");
+            }
+            user.setDepartment(department);
+        }
+        return BaseResponse.success(this.getRepository().save(MapperUtil.mapValue(req, user)));
     }
 
     public User create(User user) throws Exception {

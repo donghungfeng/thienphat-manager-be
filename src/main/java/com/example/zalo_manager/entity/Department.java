@@ -18,7 +18,9 @@ public class Department extends BaseEntity{
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String longtitude;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String latitude;
 }

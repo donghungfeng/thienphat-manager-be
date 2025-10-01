@@ -37,4 +37,8 @@ public class User extends BaseEntity{
 
     @Column()
     private int status = 1;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 }
