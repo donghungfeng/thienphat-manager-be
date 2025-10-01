@@ -87,6 +87,15 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
             if (userRepository.findAllByUsername(user.getUsername()).isPresent()) {
                 return new BaseResponse().fail("Tài khoản đã tồn tại");
             }
+            if (user.getDepartment() == null){
+                return BaseResponse.fail("department không được để trống");
+            }else {
+                Department department = departmentRepository.findAllByIdAndIsActive(user.getDepartment().getId(), 1);
+                if (department == null){
+                    return BaseResponse.fail("department không tồn tại");
+                }
+                user.setDepartment(department);
+            }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRole("user");
             user.setStatus(1);
@@ -171,10 +180,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         MapperUtil.mapValue(t, entityMy);
 //        entityMy.setPassword(passwordEncoder.encode(t.getPassword()));
         return getRepository().save(entityMy);
-    }
-
-    private boolean isValidPassword(String userPass, String reqPass) {
-        return !StringUtils.isEmpty(reqPass) && passwordEncoder.matches(reqPass, userPass);
     }
 }
 

@@ -20,8 +20,6 @@ import java.time.LocalTime;
 @Builder
 public class Work extends BaseEntity {
     private String username;
-    @Column(length = 100)
-    private String date;
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(nullable = false)
     private LocalDate date;
@@ -31,6 +29,8 @@ public class Work extends BaseEntity {
     @JsonFormat(pattern = "HH:mm:ss")
     @Column(name = "time_checkout")
     private LocalTime timeCheckout;
+    @Column(name = "min_checkin_late")
+    private Integer minCheckinLate;
     @Column(name = "min_checkout_early")
     private Integer minCheckoutEarly;
     private Integer status;
