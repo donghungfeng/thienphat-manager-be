@@ -17,6 +17,6 @@ public class ZaloController {
 
     @GetMapping("send")
     public BaseResponse send() throws Exception {
-        return zaloService.sendMessage();
+        return zaloService.sendMessage("hello", "6520181963459154601");
     }
 }

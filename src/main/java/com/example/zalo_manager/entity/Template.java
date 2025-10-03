@@ -1,5 +1,6 @@
 package com.example.zalo_manager.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "template")
 @Builder
 public class Template extends BaseEntity{
+    @Column(columnDefinition = "LONGTEXT")
     private String value;
     private String description;
 }

@@ -31,7 +31,7 @@ public class ZaloServiceImpl implements ZaloService {
     private static final String REFRESH_URL = "https://oauth.zaloapp.com/v4/oa/access_token";
 
     @Override
-    public BaseResponse sendMessage() throws Exception {
+    public BaseResponse sendMessage(String temp, String userId) throws Exception {
         String accessToken = configRepository.findByKey("access_token").get().getValue();
 
         HttpHeaders headers = new HttpHeaders();
@@ -39,8 +39,8 @@ public class ZaloServiceImpl implements ZaloService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         ZaloMessageRequest request = new ZaloMessageRequest(
-                new ZaloMessageRequest.Recipient("6520181963459154601"),
-                new ZaloMessageRequest.Message("hello")
+                new ZaloMessageRequest.Recipient(userId),
+                new ZaloMessageRequest.Message(temp)
         );
 
         HttpEntity<ZaloMessageRequest> entity = new HttpEntity<>(request, headers);
@@ -56,7 +56,7 @@ public class ZaloServiceImpl implements ZaloService {
 
         if (json.has("error") && json.get("error").asInt() == -216) {
             this.refreshToken();
-            return sendMessage(); // gọi lại sau khi refresh
+            return sendMessage(temp, userId); // gọi lại sau khi refresh
         }
 
         return BaseResponse.success(request);
