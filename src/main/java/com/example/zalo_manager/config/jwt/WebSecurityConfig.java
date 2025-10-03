@@ -47,6 +47,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/work/info").permitAll()
                         .requestMatchers(HttpMethod.POST, "/work/action").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/work/update").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/zalo/send").permitAll()
                         // cho phép OPTIONS preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/v3/api-docs", "/swagger-ui.html", "/swagger-ui/**").permitAll()

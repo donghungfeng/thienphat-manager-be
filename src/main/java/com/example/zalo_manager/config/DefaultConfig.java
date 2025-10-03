@@ -1,21 +1,26 @@
 package com.example.zalo_manager.config;
 
+import com.example.zalo_manager.config.properties.ZaloProperties;
+import com.example.zalo_manager.entity.Config;
 import com.example.zalo_manager.entity.Department;
 import com.example.zalo_manager.entity.User;
-import com.example.zalo_manager.repository.DepartmentRepository;
+import com.example.zalo_manager.repository.ConfigRepository;
 import com.example.zalo_manager.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
-public class DefaultUserConfig {
+public class DefaultConfig {
 
     @Bean
-    CommandLineRunner init(UserRepository userRepository, DepartmentRepository departmentRepository, BCryptPasswordEncoder passwordEncoder) {
+    CommandLineRunner init(UserRepository userRepository, ConfigRepository configRepository, BCryptPasswordEncoder passwordEncoder, ZaloProperties zaloProperties) {
         return args -> {
+
             if (userRepository.findAllByUsername("hnhy01").isEmpty()) {
                 Department department = Department
                         .builder()
@@ -33,6 +38,24 @@ public class DefaultUserConfig {
                 admin.setDepartment(department);
                 userRepository.save(admin);
             }
+            List<Config> configs = new ArrayList<>();
+            if (configRepository.findByKey("access_token").isEmpty()) {
+                Config config = Config
+                        .builder()
+                        .key("access_token")
+                        .value(zaloProperties.getAccessToken())
+                        .build();
+                configs.add(config);
+            }
+            if (configRepository.findByKey("refresh_token").isEmpty()) {
+                Config config = Config
+                        .builder()
+                        .key("refresh_token")
+                        .value(zaloProperties.getRefreshToken())
+                        .build();
+                configs.add(config);
+            }
+            configRepository.saveAll(configs);
         };
     }
 }
