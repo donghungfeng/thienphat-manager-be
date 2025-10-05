@@ -48,8 +48,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/work/action").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/work/update").permitAll()
                         .requestMatchers(HttpMethod.GET, "/zalo/send").permitAll()
-                        // cho phép OPTIONS preflight
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/webhook/follow-event").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/v3/api-docs", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         // tất cả request khác cần authentication
                         .anyRequest().authenticated()
@@ -66,7 +65,7 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

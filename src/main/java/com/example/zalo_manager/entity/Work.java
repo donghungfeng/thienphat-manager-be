@@ -42,6 +42,8 @@ public class Work extends BaseEntity {
     private String locationCheckin;
     @Column(name = "location_checkout", length = 1000)
     private String locationCheckout;
+    @Column(name = "location_checkin_dis")
+    private Integer locationCheckinDis;
     @Column(name = "location_checkout_dis")
     private Integer locationCheckoutDis;
     @Column(name = "checkin_image", columnDefinition = "LONGTEXT")

@@ -1,7 +1,6 @@
 package com.example.zalo_manager.model.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -31,6 +30,7 @@ public class WorkActionReq {
     private String device;
     private String locationCheckin;
     private String locationCheckout;
+    private Integer locationCheckinDis;
     private Integer locationCheckoutDis;
     private String checkinImage;
     private String checkouImage;

@@ -42,8 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         // Bỏ qua public endpoint POST và OPTIONS
-        if (("POST".equals(method) && ("/user/login".equals(path) || "/user/create".equals(path))) ||
-                "OPTIONS".equals(method)) {
+        if (("POST".equals(method) && ("/user/login".equals(path) || "/user/create".equals(path)))) {
             filterChain.doFilter(request, response);
             return;
         }
