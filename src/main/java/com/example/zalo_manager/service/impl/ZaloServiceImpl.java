@@ -9,8 +9,10 @@ import com.example.zalo_manager.repository.ConfigRepository;
 import com.example.zalo_manager.service.ZaloService;
 import com.example.zalo_manager.util.MapperUtil;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -60,6 +62,16 @@ public class ZaloServiceImpl implements ZaloService {
         }
 
         return BaseResponse.success(request);
+    }
+
+    @PostConstruct
+    public void runOnStartup() throws Exception {
+        this.refreshToken();
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // Cron expression: giây=0, phút=0, giờ=0, ngày=*, tháng=*, ngày trong tuần=?
+    public void runDailyAtMidnight() throws Exception {
+        this.refreshToken();
     }
 
 

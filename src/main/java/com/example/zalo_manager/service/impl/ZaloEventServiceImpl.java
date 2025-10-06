@@ -6,8 +6,9 @@ import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.model.webhook.ZaloFollowEventWebhook;
 import com.example.zalo_manager.repository.BaseRepository;
 import com.example.zalo_manager.repository.ZaloFollowEventRepository;
-import com.example.zalo_manager.service.ZaloFollowEventService;
+import com.example.zalo_manager.service.ZaloEventService;
 import com.example.zalo_manager.util.MapperUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @Service
-public class ZaloFollowerEventServiceImpl extends BaseServiceImpl<ZaloFollowEvent> implements ZaloFollowEventService {
+public class ZaloEventServiceImpl extends BaseServiceImpl<ZaloFollowEvent> implements ZaloEventService {
     @Autowired
     ZaloFollowEventRepository zaloFollowEventRepository;
 
@@ -29,12 +30,22 @@ public class ZaloFollowerEventServiceImpl extends BaseServiceImpl<ZaloFollowEven
     }
 
     @Override
-    public BaseResponse create(String req, String signatureHeader) {
+    public void event(String rawBody) {
+        JsonNode root = MapperUtil.toJsonNode(rawBody);
+        String eventName = root.get("event_name").asText();
+        switch (eventName){
+            case "follow":
+                ZaloFollowEventWebhook zaloFollowEventWebhook = MapperUtil.fromJson(rawBody, ZaloFollowEventWebhook.class);
+                this.follow(zaloFollowEventWebhook);
+                break;
+        }
+    }
+
+    public void follow(ZaloFollowEventWebhook zaloFollowEventWebhook) {
         // Parse JSON
-        ZaloFollowEventWebhook event = MapperUtil.fromJson(req, ZaloFollowEventWebhook.class);
-        ZaloFollowEvent zaloFollowEvent = MapperUtil.map(event, ZaloFollowEvent.class);
-        zaloFollowEvent.setFollowerId(event.getFollower().getId());
-        return BaseResponse.success(zaloFollowEventRepository.save(zaloFollowEvent));
+        ZaloFollowEvent zaloFollowEvent = MapperUtil.map(zaloFollowEventWebhook, ZaloFollowEvent.class);
+        zaloFollowEvent.setFollowerId(zaloFollowEventWebhook.getFollower().getId());
+        zaloFollowEventRepository.save(zaloFollowEvent);
     }
 
     private boolean verifySignature(String rawBody, String timestamp, String signatureHeader) {
