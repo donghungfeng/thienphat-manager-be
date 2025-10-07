@@ -19,4 +19,5 @@ public class UserUpdateReq {
     private String deviceName;
     private String deviceCode;
     private String note;
+    private String identityCardNumber;
 }

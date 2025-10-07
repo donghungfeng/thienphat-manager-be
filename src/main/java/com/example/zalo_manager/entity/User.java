@@ -46,6 +46,9 @@ public class User extends BaseEntity{
 
     private String note;
 
+    @Column(name = "identity_card_number")
+    private String identityCardNumber;
+
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
