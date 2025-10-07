@@ -123,4 +123,15 @@ public class DateUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         return LocalDate.parse(dateStr, formatter);
     }
+
+    public static LocalDate stringToLocalDate(String dateString) {
+        try {
+            // Định dạng dd/MM/yyyy
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            // Chuyển chuỗi thành LocalDate
+            return LocalDate.parse(dateString, formatter);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Không thể parse chuỗi ngày: " + dateString + ". Định dạng phải là dd/MM/yyyy", e);
+        }
+    }
 }

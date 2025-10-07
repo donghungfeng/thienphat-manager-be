@@ -1,6 +1,5 @@
 package com.example.zalo_manager.model.request;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -16,4 +15,6 @@ public class DepartmentUpdateReq {
     private String factoryName;
     private String ntoe;
     private Integer status;
+    private String ip;
+    private Long threshold;
 }

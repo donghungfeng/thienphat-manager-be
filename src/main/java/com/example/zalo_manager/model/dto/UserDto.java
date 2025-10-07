@@ -1,7 +1,6 @@
 package com.example.zalo_manager.model.dto;
 
 import com.example.zalo_manager.entity.Department;
-import jakarta.persistence.Column;
 import lombok.*;
 
 @AllArgsConstructor

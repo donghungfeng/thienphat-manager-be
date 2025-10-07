@@ -55,4 +55,12 @@ public class MapperUtil {
             throw new RuntimeException("JSON parse to JsonNode error: " + e.getMessage(), e);
         }
     }
+
+    public static String toJson(Object source) {
+        try {
+            return objectMapper.writeValueAsString(source);
+        } catch (Exception e) {
+            throw new RuntimeException("JSON serialization error: " + e.getMessage(), e);
+        }
+    }
 }

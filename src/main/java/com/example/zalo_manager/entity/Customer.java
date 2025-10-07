@@ -80,6 +80,6 @@ public class Customer extends BaseEntity{
     private Integer status;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_id", nullable = true)
     private Company company;
 }

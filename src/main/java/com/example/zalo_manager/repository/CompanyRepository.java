@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 public interface CompanyRepository extends BaseRepository<Company> {
     boolean existsByName(String name);
     boolean existsByTaxCode(String taxCode);
-    boolean existsByAddress(String address);
+    boolean existsByIdAndIsActive(Long id, Integer isActive);
     boolean existsByPhone(String phone);
 
     boolean existsByNameAndIdNot(String name, Long id);

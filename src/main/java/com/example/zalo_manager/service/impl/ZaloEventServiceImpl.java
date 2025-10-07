@@ -1,12 +1,17 @@
 package com.example.zalo_manager.service.impl;
 
 import com.example.zalo_manager.config.properties.ZaloProperties;
+import com.example.zalo_manager.entity.Customer;
 import com.example.zalo_manager.entity.ZaloFollowEvent;
-import com.example.zalo_manager.model.response.BaseResponse;
+import com.example.zalo_manager.model.dto.zalo.user.detail.ZaloUserData;
+import com.example.zalo_manager.model.dto.zalo.user.detail.ZaloUserDetailRes;
 import com.example.zalo_manager.model.webhook.ZaloFollowEventWebhook;
 import com.example.zalo_manager.repository.BaseRepository;
+import com.example.zalo_manager.repository.CustomerRepository;
 import com.example.zalo_manager.repository.ZaloFollowEventRepository;
 import com.example.zalo_manager.service.ZaloEventService;
+import com.example.zalo_manager.service.ZaloService;
+import com.example.zalo_manager.util.DateUtil;
 import com.example.zalo_manager.util.MapperUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +27,13 @@ public class ZaloEventServiceImpl extends BaseServiceImpl<ZaloFollowEvent> imple
     ZaloFollowEventRepository zaloFollowEventRepository;
 
     @Autowired
+    ZaloService zaloService;
+
+    @Autowired
     ZaloProperties zaloProperties;
+
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Override
     protected BaseRepository<ZaloFollowEvent> getRepository() {
@@ -42,10 +53,37 @@ public class ZaloEventServiceImpl extends BaseServiceImpl<ZaloFollowEvent> imple
     }
 
     public void follow(ZaloFollowEventWebhook zaloFollowEventWebhook) {
-        // Parse JSON
-        ZaloFollowEvent zaloFollowEvent = MapperUtil.map(zaloFollowEventWebhook, ZaloFollowEvent.class);
-        zaloFollowEvent.setFollowerId(zaloFollowEventWebhook.getFollower().getId());
-        zaloFollowEventRepository.save(zaloFollowEvent);
+        String userId = zaloFollowEventWebhook.getFollower().getId();
+        ZaloUserDetailRes zaloUserDetailRes = zaloService.getUserDetail(userId);
+        customerRepository.save(zaloUserDetailToCustomer(zaloUserDetailRes));
+    }
+
+    public Customer zaloUserDetailToCustomer(ZaloUserDetailRes zaloUserDetailRes){
+        ZaloUserData data = zaloUserDetailRes.getData();
+        return Customer
+                .builder()
+                .userId(data.getUserId())
+                .userIdByApp(data.getUserIdByApp())
+                .userExternalId(data.getUserExternalId())
+                .displayName(data.getDisplayName())
+                .userAlias(data.getUserAlias())
+                .isSensitice(data.isSensitive())
+                .userLastInteractionDate(DateUtil.stringToLocalDate(data.getUserLastInteractionDate()))
+                .userIsFollower(data.isUserIsFollower())
+                .avatar(data.getAvatar())
+                .avatar120(data.getAvatars().getAvatar120())
+                .avatar240(data.getAvatars().getAvatar240())
+                .dynamicParam(data.getDynamicParam())
+                .notes(data.getTagsAndNotesInfo().getNotes().toString())
+                .tagNames(data.getTagsAndNotesInfo().getTagNames().toString())
+                .address(data.getSharedInfo().getAddress())
+                .city(data.getSharedInfo().getCity())
+                .district(data.getSharedInfo().getDistrict())
+                .phone(data.getSharedInfo().getPhone())
+                .name(data.getSharedInfo().getName())
+                .userDob(data.getSharedInfo().getUserDob())
+                .status(1)
+                .build();
     }
 
     private boolean verifySignature(String rawBody, String timestamp, String signatureHeader) {

@@ -29,5 +29,10 @@ public class Department extends BaseEntity{
 
     private String note;
 
+    private String ip;
+
+    @Column(name = "thresho_id")
+    private Long threshold;
+
     private Integer status;
 }

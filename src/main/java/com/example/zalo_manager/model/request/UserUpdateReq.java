@@ -1,6 +1,5 @@
 package com.example.zalo_manager.model.request;
 
-import com.example.zalo_manager.entity.Department;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;

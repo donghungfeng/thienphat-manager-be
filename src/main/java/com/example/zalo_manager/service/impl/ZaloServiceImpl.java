@@ -3,6 +3,7 @@ package com.example.zalo_manager.service.impl;
 import com.example.zalo_manager.config.properties.ZaloProperties;
 import com.example.zalo_manager.entity.Config;
 import com.example.zalo_manager.model.dto.zalo.ZaloMessageRequest;
+import com.example.zalo_manager.model.dto.zalo.user.detail.ZaloUserDetailRes;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.model.response.ZaloRefreshResponse;
 import com.example.zalo_manager.repository.ConfigRepository;
@@ -16,6 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ZaloServiceImpl implements ZaloService {
@@ -30,6 +38,7 @@ public class ZaloServiceImpl implements ZaloService {
 
     private static final String SEND_MSG_URL = "https://openapi.zalo.me/v3.0/oa/message/cs";
     private static final String REFRESH_URL = "https://oauth.zaloapp.com/v4/oa/access_token";
+    private static final String GET_INFO_URL = "https://openapi.zalo.me/v3.0/oa/user/detail";
 
     @Override
     public BaseResponse sendMessage(String temp, String userId) throws Exception {
@@ -64,9 +73,47 @@ public class ZaloServiceImpl implements ZaloService {
     }
 
     @Override
-    public void getUserDetail(String userId) {
+    public ZaloUserDetailRes getUserDetail(String userId) {
+        String accessToken = configRepository.findByKey("access_token").get().getValue();
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("access_token", accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        try {
+            // JSON gốc
+            String rawData = String.format("{\"user_id\":\"%s\"}", userId);
+
+            // Encode toàn bộ JSON
+            String encodedData = URLEncoder.encode(rawData, StandardCharsets.UTF_8);
+
+            // Tạo URL giống hệt cURL của bạn (giữ nguyên {} bên ngoài)
+            String url = "https://openapi.zalo.me/v3.0/oa/user/detail?data=" + encodedData;
+
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    URI.create(url), // dùng URI.create() để giữ nguyên encode
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+            );
+
+            JsonNode json = MapperUtil.toJsonNode(response.getBody());
+            if (json.has("error") && json.get("error").asInt() == -216) {
+                refreshToken();
+                return getUserDetail(userId);
+            }
+
+            return MapperUtil.fromJson(response.getBody(), ZaloUserDetailRes.class);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi khi gọi API Zalo: " + e.getMessage(), e);
+        }
     }
+
+
+
 
 //    @PostConstruct
 //    public void runOnStartup() throws Exception {
