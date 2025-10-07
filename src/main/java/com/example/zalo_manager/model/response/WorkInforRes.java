@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WorkInforRes {
-    Department department;
     Work work;
     UserDto userDto;
 }
