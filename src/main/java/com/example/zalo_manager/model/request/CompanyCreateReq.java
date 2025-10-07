@@ -19,4 +19,7 @@ public class CompanyCreateReq {
     @Pattern(regexp = "^0[0-9]*$", message = "Số điện thoại phải bắt đầu bằng 0 và chỉ chứa chữ số")
     private String phone;
 
+    private String note;
+
+    private Integer status;
 }

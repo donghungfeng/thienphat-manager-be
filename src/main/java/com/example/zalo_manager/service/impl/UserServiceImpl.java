@@ -5,13 +5,11 @@ import com.example.zalo_manager.config.jwt.JwtTokenProvider;
 import com.example.zalo_manager.entity.Department;
 import com.example.zalo_manager.entity.User;
 import com.example.zalo_manager.model.dto.UserDto;
-import com.example.zalo_manager.model.request.ChangePasswordReq;
-import com.example.zalo_manager.model.request.ChangeRoleReq;
-import com.example.zalo_manager.model.request.LoginReq;
-import com.example.zalo_manager.model.request.UserUpdateReq;
+import com.example.zalo_manager.model.request.*;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.model.response.LoginRes;
 import com.example.zalo_manager.repository.BaseRepository;
+import com.example.zalo_manager.repository.ConfigRepository;
 import com.example.zalo_manager.repository.DepartmentRepository;
 import com.example.zalo_manager.repository.UserRepository;
 import com.example.zalo_manager.service.UserService;
@@ -40,6 +38,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private ConfigRepository configRepository;
+
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
@@ -64,43 +65,44 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         // Tạo JWT token
         String token = jwtTokenProvider.generateToken(user.getUsername());
 
+
+
         // Build response
         LoginRes result = new LoginRes();
         MapperUtil.mapValue(user, result);
         result.setToken(token);
-
+        result.setZaloAccessToken(configRepository.findByKey("access_token").get().getValue());
         return new BaseResponse().success(result);
     }
 
 
     @Override
-    public BaseResponse register(User user) {
-        User result = new User();
+    public BaseResponse register(UserCreateReq req) {
+        User result = MapperUtil.map(req, User.class);
         try {
-            if (user.getUsername() == null) {
+            if (req.getUsername() == null) {
                 return new BaseResponse().fail("Tài khoản không được để trống");
             }
-            if (user.getPassword() == null) {
+            if (req.getPassword() == null) {
                 return new BaseResponse().fail("Mật khẩu không được để trống");
             }
 
-            if (userRepository.findAllByUsername(user.getUsername()).isPresent()) {
+            if (userRepository.findAllByUsername(req.getUsername()).isPresent()) {
                 return new BaseResponse().fail("Tài khoản đã tồn tại");
             }
-            if (user.getDepartment() == null){
+            if (req.getDepartmentId() == null){
                 return BaseResponse.fail("department không được để trống");
             }else {
-                Department department = departmentRepository.findAllByIdAndIsActive(user.getDepartment().getId(), 1);
+                Department department = departmentRepository.findAllByIdAndIsActive(req.getDepartmentId(), 1);
                 if (department == null){
                     return BaseResponse.fail("department không tồn tại");
                 }
-                user.setDepartment(department);
+                result.setDepartment(department);
             }
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRole("user");
-            user.setStatus(1);
-            result = this.create(user);
-            return new BaseResponse().success(MapperUtil.map(result, UserDto.class));
+            result.setPassword(passwordEncoder.encode(req.getPassword()));
+            result.setRole("user");
+            result.setStatus(1);
+            return BaseResponse.success(MapperUtil.map(this.create(result), UserDto.class));
         }catch (Exception e){
             return new BaseResponse(500, "Có lỗi xảy ra khi tạo tài khoản", null);
         }
@@ -173,13 +175,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
     public User create(User user) throws Exception {
         return this.getRepository().save(user);
-    }
-
-    public User update(User t) throws Exception {
-        User entityMy = this.getRepository().findAllById(t.getId());
-        MapperUtil.mapValue(t, entityMy);
-//        entityMy.setPassword(passwordEncoder.encode(t.getPassword()));
-        return getRepository().save(entityMy);
     }
 }
 

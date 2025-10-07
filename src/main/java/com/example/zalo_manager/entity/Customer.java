@@ -1,9 +1,7 @@
 package com.example.zalo_manager.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -78,4 +76,10 @@ public class Customer extends BaseEntity{
 
     @Column(name = "user_dob")
     private String userDob;
+
+    private Integer status;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 }

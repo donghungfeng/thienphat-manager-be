@@ -1,4 +1,4 @@
-package com.example.zalo_manager.model.dto;
+package com.example.zalo_manager.model.dto.zalo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

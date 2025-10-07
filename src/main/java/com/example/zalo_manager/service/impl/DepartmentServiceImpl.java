@@ -1,6 +1,5 @@
 package com.example.zalo_manager.service.impl;
 
-import com.example.zalo_manager.entity.Company;
 import com.example.zalo_manager.entity.Department;
 import com.example.zalo_manager.model.request.DepartmentCreateReq;
 import com.example.zalo_manager.model.request.DepartmentUpdateReq;
@@ -33,12 +32,7 @@ public class DepartmentServiceImpl extends BaseServiceImpl<Department> implement
 
     @Override
     public BaseResponse create(DepartmentCreateReq req) {
-        Department department = Department
-                .builder()
-                .name(req.getName())
-                .longtitude(req.getLongtitude())
-                .latitude(req.getLatitude())
-                .build();
+        Department department = MapperUtil.map(req, Department.class);
         return BaseResponse.success(departmentRepository.save(department));
     }
 

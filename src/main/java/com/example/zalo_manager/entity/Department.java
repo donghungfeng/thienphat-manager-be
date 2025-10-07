@@ -18,9 +18,16 @@ public class Department extends BaseEntity{
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "factory_name")
+    private String factoryName;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String longtitude;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String latitude;
+
+    private String note;
+
+    private Integer status;
 }

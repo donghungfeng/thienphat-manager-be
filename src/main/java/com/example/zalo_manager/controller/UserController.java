@@ -2,9 +2,7 @@ package com.example.zalo_manager.controller;
 
 import com.example.zalo_manager.entity.User;
 import com.example.zalo_manager.model.dto.UserDto;
-import com.example.zalo_manager.model.request.ChangePasswordReq;
-import com.example.zalo_manager.model.request.ChangeRoleReq;
-import com.example.zalo_manager.model.request.LoginReq;
+import com.example.zalo_manager.model.request.*;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.service.BaseService;
 import com.example.zalo_manager.service.UserService;
@@ -28,8 +26,13 @@ public class UserController extends BaseController<User, UserDto>{
     }
 
     @PostMapping("/create")
-    public BaseResponse create(@RequestBody User t) throws Exception {
+    public BaseResponse create(@RequestBody UserCreateReq t) throws Exception {
         return userService.register(t);
+    }
+
+    @PutMapping("/update")
+    public BaseResponse update(@RequestBody UserUpdateReq t) throws Exception {
+        return userService.update(t);
     }
 
     @PostMapping("/login")

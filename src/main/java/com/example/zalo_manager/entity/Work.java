@@ -49,7 +49,7 @@ public class Work extends BaseEntity {
     @Column(name = "checkin_image", columnDefinition = "LONGTEXT")
     private String checkinImage;
     @Column(name = "checkout_image", columnDefinition = "LONGTEXT")
-    private String checkouImage;
+    private String checkoutImage;
     @Column(columnDefinition = "TEXT")
     private String note;
     @Column(name = "hour_working_act")

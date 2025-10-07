@@ -13,4 +13,7 @@ public class DepartmentUpdateReq {
     private String name;
     private String longtitude;
     private String latitude;
+    private String factoryName;
+    private String ntoe;
+    private Integer status;
 }

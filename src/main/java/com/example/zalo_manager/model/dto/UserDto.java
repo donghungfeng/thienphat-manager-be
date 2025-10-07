@@ -1,5 +1,7 @@
 package com.example.zalo_manager.model.dto;
 
+import com.example.zalo_manager.entity.Department;
+import jakarta.persistence.Column;
 import lombok.*;
 
 @AllArgsConstructor
@@ -15,7 +17,10 @@ public class UserDto {
     private String email;
     private String phone;
     private String address;
-    //    private int isActive;
     private int status;
-
+    private Integer isActive;
+    private String deviceName;
+    private String deviceCode;
+    private String note;
+    private Department department;
 }

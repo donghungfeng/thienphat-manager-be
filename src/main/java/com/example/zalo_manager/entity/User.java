@@ -38,6 +38,14 @@ public class User extends BaseEntity{
     @Column()
     private int status = 1;
 
+    @Column(name = "device_name")
+    private String deviceName;
+
+    @Column(name = "device_code")
+    private String deviceCode;
+
+    private String note;
+
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;

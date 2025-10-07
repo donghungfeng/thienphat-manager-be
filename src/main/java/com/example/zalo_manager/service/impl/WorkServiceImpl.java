@@ -2,6 +2,7 @@ package com.example.zalo_manager.service.impl;
 
 import com.example.zalo_manager.entity.User;
 import com.example.zalo_manager.entity.Work;
+import com.example.zalo_manager.model.dto.UserDto;
 import com.example.zalo_manager.model.request.WorkActionReq;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.model.response.WorkInforRes;
@@ -10,14 +11,11 @@ import com.example.zalo_manager.repository.UserRepository;
 import com.example.zalo_manager.repository.WorkRepository;
 import com.example.zalo_manager.service.WorkService;
 import com.example.zalo_manager.util.MapperUtil;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Optional;
 
 @Service
 public class WorkServiceImpl  extends BaseServiceImpl<Work> implements WorkService {
@@ -42,6 +40,7 @@ public class WorkServiceImpl  extends BaseServiceImpl<Work> implements WorkServi
                 .builder()
                 .department(user.getDepartment())
                 .work(work)
+                .userDto(MapperUtil.map(user, UserDto.class))
                 .build());
     }
 

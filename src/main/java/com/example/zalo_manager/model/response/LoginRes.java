@@ -1,5 +1,6 @@
 package com.example.zalo_manager.model.response;
 
+import com.example.zalo_manager.entity.Department;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,6 @@ public class LoginRes {
     public String address;
     public String id;
     public String role;
-    public Long departmentId;
+    public Department department;
+    public String zaloAccessToken;
 }

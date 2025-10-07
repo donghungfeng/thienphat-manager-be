@@ -13,4 +13,10 @@ public class DepartmentCreateReq {
 
     @NotBlank(message = "latitude không được để trống")
     private String latitude;
+
+    private String factoryName;
+
+    private String ntoe;
+
+    private Integer status;
 }

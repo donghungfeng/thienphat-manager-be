@@ -26,4 +26,10 @@ public class Company extends BaseEntity{
 
     @Column(nullable = false, unique = true)
     private String phone;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String note;
+
+    @Column()
+    private Integer status;
 }
