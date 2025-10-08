@@ -1,9 +1,8 @@
 package com.example.zalo_manager.controller;
 
-import com.example.zalo_manager.entity.User;
 import com.example.zalo_manager.entity.Work;
-import com.example.zalo_manager.model.dto.UserDto;
 import com.example.zalo_manager.model.request.WorkActionReq;
+import com.example.zalo_manager.model.request.WorkUpdateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.service.BaseService;
 import com.example.zalo_manager.service.WorkService;
@@ -42,7 +41,7 @@ public class WorkController extends BaseController<Work, Work>{
     }
 
     @PutMapping("update")
-    public BaseResponse update(Work work){
-        return workService.update(work);
+    public BaseResponse update(@RequestBody @Valid WorkUpdateReq req){
+        return workService.update(req);
     }
 }

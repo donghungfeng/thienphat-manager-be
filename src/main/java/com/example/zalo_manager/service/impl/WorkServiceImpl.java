@@ -4,6 +4,7 @@ import com.example.zalo_manager.entity.User;
 import com.example.zalo_manager.entity.Work;
 import com.example.zalo_manager.model.dto.UserDto;
 import com.example.zalo_manager.model.request.WorkActionReq;
+import com.example.zalo_manager.model.request.WorkUpdateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.model.response.WorkInforRes;
 import com.example.zalo_manager.repository.BaseRepository;
@@ -62,7 +63,7 @@ public class WorkServiceImpl  extends BaseServiceImpl<Work> implements WorkServi
     }
 
     @Override
-    public BaseResponse update(Work req) {
+    public BaseResponse update(WorkUpdateReq req) {
         Work work = workRepository.findById(req.getId()).orElse(null);
         if (work == null) {
             return BaseResponse.fail(req.getId(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "work không tồn tại");

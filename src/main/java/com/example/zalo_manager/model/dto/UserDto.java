@@ -23,4 +23,5 @@ public class UserDto {
     private String note;
     private Department department;
     private String identityCardNumber;
+    private String avatar;
 }

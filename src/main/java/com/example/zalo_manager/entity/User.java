@@ -49,6 +49,9 @@ public class User extends BaseEntity{
     @Column(name = "identity_card_number")
     private String identityCardNumber;
 
+    @Column(name = "avatar", columnDefinition = "LONGTEXT")
+    private String avatar;
+
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;

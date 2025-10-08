@@ -35,5 +35,6 @@ public class WorkActionReq {
     private String checkinImage;
     private String checkouImage;
     private String note;
-
+    private Integer hourWorkingAct;
+    private Integer hourWorkingRecord;
 }

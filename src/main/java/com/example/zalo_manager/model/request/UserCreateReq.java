@@ -27,6 +27,7 @@ public class UserCreateReq {
 
     private String note;
     private String identityCardNumber;
+    private String avatar;
 
     @NotBlank(message = "departmentId Không được để trống")
     private Long departmentId;
