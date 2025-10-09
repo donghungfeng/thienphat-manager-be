@@ -31,12 +31,12 @@ public class BaseEntity {
 
     @CreatedDate
     @Column(name = "created_date", updatable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd")   // ✅ đảm bảo format JSON
+    @JsonFormat(pattern = "dd/MM/yyyy")   // ✅ đảm bảo format JSON
     private LocalDate createdDate;
 
     @LastModifiedDate
     @Column(name = "updated_date")
-    @JsonFormat(pattern = "yyyy-MM-dd")   // ✅ đảm bảo format JSON
+    @JsonFormat(pattern = "dd/MM/yyyy")   // ✅ đảm bảo format JSON
     private LocalDate updatedDate;
 
     @Column(name = "created_by")

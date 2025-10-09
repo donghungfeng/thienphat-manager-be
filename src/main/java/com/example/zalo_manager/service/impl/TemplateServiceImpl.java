@@ -3,6 +3,7 @@ package com.example.zalo_manager.service.impl;
 import com.example.zalo_manager.entity.Customer;
 import com.example.zalo_manager.entity.Template;
 import com.example.zalo_manager.model.request.TemplateCreateReq;
+import com.example.zalo_manager.model.request.TemplateUpdateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.repository.BaseRepository;
 import com.example.zalo_manager.repository.CustomerRepository;
@@ -15,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,6 +69,15 @@ public class TemplateServiceImpl extends BaseServiceImpl<Template> implements Te
         Customer customer = customerRepository.findAllById(customerId);
         zaloService.sendMessage(this.render(template.getValue(), customer), customer.getUserId());
         return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse update(TemplateUpdateReq req) {
+        Template template = templateRepository.findAllByIdAndIsActive(req.getId(), 1);
+        if (template == null){
+            return BaseResponse.fail(req, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Template không tồn tại");
+        }
+        return BaseResponse.success(templateRepository.save(MapperUtil.mapValue(req, template)));
     }
 
 

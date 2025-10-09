@@ -3,6 +3,7 @@ package com.example.zalo_manager.controller;
 import com.example.zalo_manager.entity.Template;
 import com.example.zalo_manager.model.dto.UserDto;
 import com.example.zalo_manager.model.request.TemplateCreateReq;
+import com.example.zalo_manager.model.request.TemplateUpdateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.service.BaseService;
 import com.example.zalo_manager.service.TemplateService;
@@ -28,6 +29,11 @@ public class TemplateController extends BaseController<Template, Template>{
     @PostMapping("create")
     public BaseResponse create(@RequestBody @Valid TemplateCreateReq req){
         return templateService.create(req);
+    }
+
+    @PutMapping("update")
+    public BaseResponse update(@RequestBody @Valid TemplateUpdateReq req){
+        return templateService.update(req);
     }
 
     @GetMapping("send-temp")

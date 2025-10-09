@@ -65,6 +65,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         // Tạo JWT token
         String token = jwtTokenProvider.generateToken(user.getUsername());
 
+        if (user != null && user.getStatus() == -1){
+            return BaseResponse.success("Tài khoản đã bị khóa");
+        }
 
 
         // Build response
@@ -72,7 +75,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         MapperUtil.mapValue(user, result);
         result.setToken(token);
         result.setZaloAccessToken(configRepository.findByKey("access_token").get().getValue());
-        return new BaseResponse().success(result);
+        return BaseResponse.success(result);
     }
 
 
