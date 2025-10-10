@@ -23,7 +23,7 @@ public class IssueController extends BaseController<Issue, Issue>{
 
     @Override
     protected BaseService<Issue> getService() {
-        return null;
+        return issueService;
     }
 
     @PostMapping("create")
