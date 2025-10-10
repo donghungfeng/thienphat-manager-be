@@ -2,7 +2,8 @@ package com.example.zalo_manager.service.impl;
 
 import com.example.zalo_manager.entity.User;
 import com.example.zalo_manager.entity.Work;
-import com.example.zalo_manager.model.dto.UserDto;
+import com.example.zalo_manager.model.dto.WorkInfoDto;
+import com.example.zalo_manager.model.dto.WorkInfoUserDto;
 import com.example.zalo_manager.model.request.WorkActionReq;
 import com.example.zalo_manager.model.request.WorkUpdateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
@@ -39,8 +40,8 @@ public class WorkServiceImpl  extends BaseServiceImpl<Work> implements WorkServi
         Work work = workRepository.findByDateAndUsername(date, username);
         return BaseResponse.success(WorkInforRes
                 .builder()
-                .work(work)
-                .userDto(MapperUtil.map(user, UserDto.class))
+                .work(MapperUtil.map(work, WorkInfoDto.class))
+                .userDto(MapperUtil.map(user, WorkInfoUserDto.class))
                 .build());
     }
 

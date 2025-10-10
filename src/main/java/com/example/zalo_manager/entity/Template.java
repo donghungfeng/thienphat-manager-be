@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "template")
 @Builder
 public class Template extends BaseEntity{
+    private String name;
+    private Integer type;
+    private String title;
+    private Integer status;
+    private String note;
     @Column(columnDefinition = "LONGTEXT")
     private String value;
     private String description;

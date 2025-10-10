@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ZaloMessageRequest {
     private Recipient recipient;
-    private Message message;
+    private Object message;
 
     @Data
     @NoArgsConstructor

@@ -1,12 +1,14 @@
 package com.example.zalo_manager.service.impl;
 
 import com.example.zalo_manager.config.properties.ZaloProperties;
+import com.example.zalo_manager.entity.Company;
 import com.example.zalo_manager.entity.Customer;
 import com.example.zalo_manager.entity.ZaloFollowEvent;
 import com.example.zalo_manager.model.dto.zalo.user.detail.ZaloUserData;
 import com.example.zalo_manager.model.dto.zalo.user.detail.ZaloUserDetailRes;
 import com.example.zalo_manager.model.webhook.ZaloFollowEventWebhook;
 import com.example.zalo_manager.repository.BaseRepository;
+import com.example.zalo_manager.repository.CompanyRepository;
 import com.example.zalo_manager.repository.CustomerRepository;
 import com.example.zalo_manager.repository.ZaloFollowEventRepository;
 import com.example.zalo_manager.service.ZaloEventService;
@@ -35,6 +37,9 @@ public class ZaloEventServiceImpl extends BaseServiceImpl<ZaloFollowEvent> imple
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    CompanyRepository companyRepository;
+
     @Override
     protected BaseRepository<ZaloFollowEvent> getRepository() {
         return zaloFollowEventRepository;
@@ -60,6 +65,7 @@ public class ZaloEventServiceImpl extends BaseServiceImpl<ZaloFollowEvent> imple
 
     public Customer zaloUserDetailToCustomer(ZaloUserDetailRes zaloUserDetailRes){
         ZaloUserData data = zaloUserDetailRes.getData();
+        Company company = companyRepository.findAllByIdAndIsActive(1L, 1);
         return Customer
                 .builder()
                 .userId(data.getUserId())
@@ -80,9 +86,10 @@ public class ZaloEventServiceImpl extends BaseServiceImpl<ZaloFollowEvent> imple
                 .city(data.getSharedInfo().getCity())
                 .district(data.getSharedInfo().getDistrict())
                 .phone(data.getSharedInfo().getPhone())
-                .name(data.getSharedInfo().getName())
+                .name(data.getDisplayName())
                 .userDob(data.getSharedInfo().getUserDob())
                 .status(1)
+                .company(company)
                 .build();
     }
 

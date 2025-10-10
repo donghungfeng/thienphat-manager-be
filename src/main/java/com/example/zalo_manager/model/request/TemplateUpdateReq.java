@@ -16,5 +16,10 @@ public class TemplateUpdateReq {
     @Positive(message = "Id phải là số dương")
     private Long id;
     private String value;
+    private String name;
+    private Integer type;
+    private String title;
+    private Integer status;
+    private String note;
     private String description;
 }

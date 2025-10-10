@@ -1,8 +1,7 @@
 package com.example.zalo_manager.model.response;
 
-import com.example.zalo_manager.entity.Department;
-import com.example.zalo_manager.entity.Work;
-import com.example.zalo_manager.model.dto.UserDto;
+import com.example.zalo_manager.model.dto.WorkInfoDto;
+import com.example.zalo_manager.model.dto.WorkInfoUserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WorkInforRes {
-    Work work;
-    UserDto userDto;
+    WorkInfoDto work;
+    WorkInfoUserDto userDto;
 }

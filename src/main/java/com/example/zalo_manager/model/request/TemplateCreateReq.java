@@ -13,5 +13,10 @@ import lombok.NoArgsConstructor;
 public class TemplateCreateReq {
     @NotBlank(message = "Value không được để trống")
     private String value;
+    private String name;
+    private Integer type;
+    private String title;
+    private Integer status;
+    private String note;
     private String description;
 }
