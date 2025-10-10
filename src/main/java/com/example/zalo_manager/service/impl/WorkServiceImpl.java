@@ -40,7 +40,7 @@ public class WorkServiceImpl  extends BaseServiceImpl<Work> implements WorkServi
         Work work = workRepository.findByDateAndUsername(date, username);
         return BaseResponse.success(WorkInforRes
                 .builder()
-                .work(MapperUtil.map(work, WorkInfoDto.class))
+                .work(work != null ? MapperUtil.map(work, WorkInfoDto.class) : null)
                 .userDto(MapperUtil.map(user, WorkInfoUserDto.class))
                 .build());
     }
