@@ -1,9 +1,11 @@
 package com.example.zalo_manager.job;
 
 import com.example.zalo_manager.entity.ScheduleJob;
+import com.example.zalo_manager.entity.Template;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.repository.ScheduleJobRepository;
 import com.example.zalo_manager.service.TemplateService;
+import com.example.zalo_manager.service.ZaloService;
 import com.example.zalo_manager.type.JobStatus;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -18,6 +20,9 @@ public class CustomerJob implements Job {
     @Autowired
     private TemplateService templateService;
 
+    @Autowired
+    private ZaloService zaloService;
+
     @Override
     public void execute(JobExecutionContext context) {
         Long jobId = context.getJobDetail().getJobDataMap().getLong("jobId");
@@ -26,10 +31,27 @@ public class CustomerJob implements Job {
         if (job == null) return;
 
         try {
-            BaseResponse response = templateService.sendTemplate(job.getTemplate().getId(), job.getCustomer().getId());
-            if (response.getCode() == 200){
-                job.setStatus(JobStatus.DONE.getCode());
-                scheduleJobRepository.save(job);
+            Template template = job.getTemplate();
+            if (template.getType() == 1){
+                BaseResponse response = zaloService.sendMessage(templateService.render(template.getValue(), job.getCustomer()), job.getCustomer().getUserId());
+                if (response.getCode() == 200){
+                    job.setStatus(JobStatus.DONE.getCode());
+                    scheduleJobRepository.save(job);
+                }
+            }
+            if (template.getType() == 2 ){
+                BaseResponse response = zaloService.sendMessageTransactionOrder(templateService.render(template.getValue(), job.getCustomer()), job.getCustomer().getUserId());
+                if (response.getCode() == 200){
+                    job.setStatus(JobStatus.DONE.getCode());
+                    scheduleJobRepository.save(job);
+                }
+            }
+            if (template.getType() == 3){
+                BaseResponse response = zaloService.sendMessagePromotion(templateService.render(template.getValue(), job.getCustomer()), job.getCustomer().getUserId());
+                if (response.getCode() == 200){
+                    job.setStatus(JobStatus.DONE.getCode());
+                    scheduleJobRepository.save(job);
+                }
             }
 
         } catch (Exception e) {
