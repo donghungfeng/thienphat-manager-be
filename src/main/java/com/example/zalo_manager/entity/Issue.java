@@ -26,12 +26,10 @@ public class Issue extends BaseEntity{
     @JoinColumn(name = "assign_id", nullable = true)
     private User assign;
 
-    @Column(name = "resolve_date", updatable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")   // ✅ đảm bảo format JSON
+    @Column(name = "resolve_date")// ✅ đảm bảo format JSON
     private LocalDate resolveDate;
 
-    @Column(name = "due_date", updatable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")   // ✅ đảm bảo format JSON
+    @Column(name = "due_date")// ✅ đảm bảo format JSON
     private LocalDate dueDate;
 
     private Integer estimate;
