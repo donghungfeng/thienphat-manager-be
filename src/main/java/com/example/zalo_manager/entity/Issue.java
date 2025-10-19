@@ -27,9 +27,11 @@ public class Issue extends BaseEntity{
     private User assign;
 
     @Column(name = "resolve_date")// ✅ đảm bảo format JSON
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate resolveDate;
 
     @Column(name = "due_date")// ✅ đảm bảo format JSON
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dueDate;
 
     private Integer estimate;

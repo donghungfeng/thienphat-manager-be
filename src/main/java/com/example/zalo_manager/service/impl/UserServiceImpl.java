@@ -121,6 +121,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
             return new BaseResponse().fail("Tài khoản không tồn tại");
         }
         user.setRole(req.getRole());
+        userRepository.save(user);
         return new BaseResponse().success(MapperUtil.map(user, UserDto.class));
     }
 
