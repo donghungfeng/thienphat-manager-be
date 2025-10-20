@@ -2,6 +2,7 @@ package com.example.zalo_manager.service.impl;
 
 import com.example.zalo_manager.entity.Issue;
 import com.example.zalo_manager.entity.User;
+import com.example.zalo_manager.model.dto.IssueDto;
 import com.example.zalo_manager.model.request.IssueCreateReq;
 import com.example.zalo_manager.model.request.IssueUpdateReq;
 import com.example.zalo_manager.model.request.SearchReq;
@@ -57,7 +58,7 @@ public class IssueServiceImpl extends BaseServiceImpl<Issue> implements IssueSer
             }
             issue.setAssign(assignedUser);
         }
-        return BaseResponse.success(issueRepository.save(issue));
+        return BaseResponse.success(MapperUtil.map(issueRepository.save(issue), IssueDto.class));
     }
 
     @Override
@@ -86,7 +87,7 @@ public class IssueServiceImpl extends BaseServiceImpl<Issue> implements IssueSer
             }
             issue.setAssign(assignedUser);
         }
-        return BaseResponse.success(issueRepository.save(issue));
+        return BaseResponse.success(MapperUtil.map(issueRepository.save(issue), IssueDto.class));
     }
 
     @Override

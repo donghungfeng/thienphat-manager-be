@@ -1,6 +1,7 @@
 package com.example.zalo_manager.controller;
 
 import com.example.zalo_manager.entity.Issue;
+import com.example.zalo_manager.model.dto.IssueDto;
 import com.example.zalo_manager.model.request.IssueCreateReq;
 import com.example.zalo_manager.model.request.IssueUpdateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("issue")
-public class IssueController extends BaseController<Issue, Issue>{
+public class IssueController extends BaseController<Issue, IssueDto>{
     @Autowired
     IssueService issueService;
 
     public IssueController() {
-        super(Issue.class);
+        super(IssueDto.class);
     }
 
     @Override
