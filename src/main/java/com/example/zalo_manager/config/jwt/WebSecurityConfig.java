@@ -50,6 +50,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/zalo/send").permitAll()
                         .requestMatchers(HttpMethod.POST, "/webhook").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/work/update").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/config").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/v3/api-docs", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         // tất cả request khác cần authentication
                         .anyRequest().authenticated()

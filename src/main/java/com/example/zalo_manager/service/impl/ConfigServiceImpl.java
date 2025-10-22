@@ -1,6 +1,7 @@
 package com.example.zalo_manager.service.impl;
 
 import com.example.zalo_manager.entity.Config;
+import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.repository.BaseRepository;
 import com.example.zalo_manager.repository.ConfigRepository;
 import com.example.zalo_manager.service.ConfigService;
@@ -14,5 +15,10 @@ public class ConfigServiceImpl extends BaseServiceImpl<Config> implements Config
     @Override
     protected BaseRepository<Config> getRepository() {
         return configRepository;
+    }
+
+    @Override
+    public BaseResponse getConfig(String key) {
+        return BaseResponse.success(configRepository.findByKey(key));
     }
 }

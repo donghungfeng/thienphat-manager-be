@@ -3,12 +3,14 @@ package com.example.zalo_manager.service.impl;
 import com.example.zalo_manager.entity.Issue;
 import com.example.zalo_manager.entity.User;
 import com.example.zalo_manager.model.dto.IssueDto;
+import com.example.zalo_manager.model.dto.SearchIssueDto;
 import com.example.zalo_manager.model.request.IssueCreateReq;
 import com.example.zalo_manager.model.request.IssueUpdateReq;
 import com.example.zalo_manager.model.request.SearchReq;
 import com.example.zalo_manager.model.response.BaseResponse;
 import com.example.zalo_manager.query.CustomRsqlVisitor;
 import com.example.zalo_manager.repository.BaseRepository;
+import com.example.zalo_manager.repository.CommentRepository;
 import com.example.zalo_manager.repository.IssueRepository;
 import com.example.zalo_manager.repository.UserRepository;
 import com.example.zalo_manager.service.IssueService;
@@ -18,11 +20,13 @@ import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -37,6 +41,9 @@ public class IssueServiceImpl extends BaseServiceImpl<Issue> implements IssueSer
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Override
     protected BaseRepository<Issue> getRepository() {
@@ -91,15 +98,28 @@ public class IssueServiceImpl extends BaseServiceImpl<Issue> implements IssueSer
     }
 
     @Override
-    public Page<Issue> search(SearchReq req) {
+    public BaseResponse customSearch(SearchReq req) {
         User user = userRepository.findAllByUsername(contextUtil.getUserName()).get();
         if (Objects.equals(user.getRole(), "user")){
-            req.setFilter(req.getFilter().concat(";id==" + user.getId()));
+            req.setFilter(req.getFilter().concat(";assign.id==" + user.getId()));
         }
         req.setFilter(req.getFilter().concat(DELETED_FILTER));
+
+        // Parse RSQL
         Node rootNode = new RSQLParser().parse(req.getFilter());
-        Specification<Issue> spec = rootNode.accept(new CustomRsqlVisitor<Issue>());
+        Specification<Issue> spec = rootNode.accept(new CustomRsqlVisitor<>());
+
         Pageable pageable = getPage(req);
-        return this.getRepository().findAll(spec, pageable);
+        Page<Issue> issues = this.getRepository().findAll(spec, pageable);
+
+        // ✅ Map sang DTO + thêm commentCount
+        List<SearchIssueDto> dtoList = issues.getContent().stream().map(issue -> {
+            SearchIssueDto dto = MapperUtil.map(issue, SearchIssueDto.class);
+            dto.setCommentCount(commentRepository.countByIssueId(issue.getId()));
+            return dto;
+        }).toList();
+
+        return BaseResponse.success(new PageImpl<>(dtoList, pageable, issues.getTotalElements()));
+
     }
 }
