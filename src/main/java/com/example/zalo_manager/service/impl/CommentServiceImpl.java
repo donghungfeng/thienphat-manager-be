@@ -63,7 +63,7 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements Comm
         if (!comment.getAssign().getId().equals(user.getId())){
             return BaseResponse.fail("Bạn không thể xóa comment này");
         }
-        comment.setIsActive(STATUS.DELETED);
+        commentRepository.delete(comment);
         return BaseResponse.success("Xóa thành công");
     }
 
