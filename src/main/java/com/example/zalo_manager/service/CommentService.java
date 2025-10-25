@@ -6,4 +6,5 @@ import com.example.zalo_manager.model.response.BaseResponse;
 
 public interface CommentService extends BaseService<Comment> {
     BaseResponse create(CommentCreateReq req);
+    BaseResponse deleteCustom(Long id);
 }

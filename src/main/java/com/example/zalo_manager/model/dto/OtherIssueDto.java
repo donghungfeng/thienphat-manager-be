@@ -19,7 +19,7 @@ public class OtherIssueDto {
     private LocalDate resolveDate;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dueDate;
-    private Integer estimate;
+    private Float estimate;
     private String title;
     private String description;
     private String url;

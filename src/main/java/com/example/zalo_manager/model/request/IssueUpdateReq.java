@@ -19,7 +19,7 @@ public class IssueUpdateReq {
     private LocalDate resolveDate;
     @JsonFormat(pattern = "dd/MM/yyyy")   // ✅ đảm bảo format JSON
     private LocalDate dueDate;
-    private Integer estimate;
+    private Float estimate;
     private String title;
     private String description;
     private String url;

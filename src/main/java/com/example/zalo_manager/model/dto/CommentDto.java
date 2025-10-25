@@ -14,6 +14,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Builder
 public class CommentDto {
+    private Long id;
     private OtherUserDto assign;
     private OtherIssueDto issue;
     private String text;

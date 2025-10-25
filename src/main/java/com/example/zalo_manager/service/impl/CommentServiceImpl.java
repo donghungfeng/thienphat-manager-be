@@ -3,6 +3,7 @@ package com.example.zalo_manager.service.impl;
 import com.example.zalo_manager.entity.Comment;
 import com.example.zalo_manager.entity.Issue;
 import com.example.zalo_manager.entity.User;
+import com.example.zalo_manager.model.cons.STATUS;
 import com.example.zalo_manager.model.dto.CommentDto;
 import com.example.zalo_manager.model.request.CommentCreateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
@@ -51,4 +52,20 @@ public class CommentServiceImpl extends BaseServiceImpl<Comment> implements Comm
                 .build();
         return BaseResponse.success(MapperUtil.map(commentRepository.save(comment), CommentDto.class));
     }
+
+    @Override
+    public BaseResponse deleteCustom(Long id) {
+        User user = userRepository.findAllByUsername(contextUtil.getUserName()).get();
+        Comment comment = this.getRepository().findAllByIdAndIsActive(id, 1);
+        if (comment == null){
+            return BaseResponse.fail("Comment không tồn tại");
+        }
+        if (!comment.getAssign().getId().equals(user.getId())){
+            return BaseResponse.fail("Bạn không thể xóa comment này");
+        }
+        comment.setIsActive(STATUS.DELETED);
+        return BaseResponse.success("Xóa thành công");
+    }
+
+
 }

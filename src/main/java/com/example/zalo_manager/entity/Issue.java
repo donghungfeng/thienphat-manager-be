@@ -34,7 +34,7 @@ public class Issue extends BaseEntity{
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dueDate;
 
-    private Integer estimate;
+    private Float estimate;
 
     private String title;
 

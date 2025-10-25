@@ -30,4 +30,10 @@ public class CommentController extends BaseController<Comment, CommentDto>{
     public BaseResponse create(@RequestBody @Valid CommentCreateReq req){
         return commentService.create(req);
     }
+
+    @DeleteMapping("/delete")
+    @Override
+    public BaseResponse deleteById(@RequestParam(name = "id") Long id) {
+        return commentService.deleteCustom(id);
+    }
 }
