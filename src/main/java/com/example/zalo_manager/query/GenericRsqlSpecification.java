@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.*;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -150,11 +151,17 @@ public class GenericRsqlSpecification<T> implements Specification<T> {
             if (type.equals(Integer.class)) return Integer.parseInt(arg);
             else if (type.equals(Long.class)) return Long.parseLong(arg);
             else if (type.equals(Byte.class)) return Byte.parseByte(arg);
-            else if (type.equals(LocalDate.class)) return LocalDate.parse(arg);
-            // ✅ thêm dòng này
+            else if (type.equals(LocalDate.class)) {
+                try {
+                    // Ưu tiên parse theo ISO (yyyy-MM-dd)
+                    return LocalDate.parse(arg);
+                } catch (Exception e) {
+                    // Nếu lỗi, thử định dạng dd/MM/yyyy
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    return LocalDate.parse(arg, formatter);
+                }
+            }
             else return arg;
         }).collect(Collectors.toList());
     }
-
-    // standard constructor, getter, setter
 }
