@@ -1,6 +1,7 @@
 package com.example.zalo_manager.controller;
 
 import com.example.zalo_manager.entity.Company;
+import com.example.zalo_manager.model.dto.CompanyDto;
 import com.example.zalo_manager.model.request.CompanyCreateReq;
 import com.example.zalo_manager.model.request.CompanyUpdateReq;
 import com.example.zalo_manager.model.response.BaseResponse;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("company")
-public class CompanyController extends BaseController<Company, Company> {
+public class CompanyController extends BaseController<Company, CompanyDto> {
     @Autowired
     private CompanyService companyService;
 
     public CompanyController() {
-        super(Company.class);
+        super(CompanyDto.class);
     }
 
     @Override

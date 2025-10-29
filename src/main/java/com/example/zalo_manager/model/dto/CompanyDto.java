@@ -1,22 +1,21 @@
-package com.example.zalo_manager.model.request;
+package com.example.zalo_manager.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
-public class CompanyUpdateReq {
-    @NotNull(message = "Id không được để trống")
-    @Positive(message = "Id phải là số dương")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class CompanyDto {
     private Long id;
     private String code;
     private String name;
     private String shortName;
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate establishedDate;
     private String representativeName;
     private String director;
@@ -24,17 +23,16 @@ public class CompanyUpdateReq {
     private String taxCode;
     private String taxDepartmentName;
     private String address;
-    @Pattern(regexp = "^0[0-9]*$", message = "Số điện thoại phải bắt đầu bằng 0 và chỉ chứa chữ số")
     private String phone;
     private String email;
     private String businessField;
     private String note;
     private Integer status;
     private String hasArising;
-    private Long accountantId; // Kế toán viên
-    private Long supporterId; // Hỗ trợ
-    private Long generalAccountantId; // Kế toán tổng hợp
-    private Long collaboratorId; // Cộng tác viên
+    private OtherUserDto accountant; // Kế toán viên
+    private OtherUserDto supporter; // Hỗ trợ
+    private OtherUserDto generalAccountant; // Kế toán tổng hợp
+    private OtherUserDto collaborator; // Cộng tác viên
     private String invoiceLink;
     private String invoiceUsername;
     private String invoicePassword;
@@ -44,7 +42,6 @@ public class CompanyUpdateReq {
     private Integer invoiceStatus;
     private String electronicTaxPassword;
     private String electronicOrderPassword;
-    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate digitalSignatureExpiryDate;
     private Integer remainingDays;
     private String totalZaloLink;
