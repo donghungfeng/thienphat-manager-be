@@ -8,6 +8,18 @@ import org.springframework.stereotype.Component;
 @Data
 @Getter
 public class ContextUtil {
-    private String userName;
+    private static final ThreadLocal<String> USER = new ThreadLocal<>();
+
+    public void setUserName(String username) {
+        USER.set(username);
+    }
+
+    public String getUserName() {
+        return USER.get();
+    }
+
+    public void clear() {
+        USER.remove(); // cực kỳ quan trọng: xóa khi request kết thúc
+    }
 }
 

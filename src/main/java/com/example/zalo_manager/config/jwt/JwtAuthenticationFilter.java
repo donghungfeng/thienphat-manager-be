@@ -37,36 +37,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        try {
+            String path = request.getServletPath();
+            String method = request.getMethod();
 
-        String path = request.getServletPath();
-        String method = request.getMethod();
+            if ("POST".equals(method) && ("/user/login".equals(path) || "/user/create".equals(path))) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        // Bỏ qua public endpoint POST và OPTIONS
-        if (("POST".equals(method) && ("/user/login".equals(path) || "/user/create".equals(path)))) {
-            filterChain.doFilter(request, response);
-            return;
+            String jwt = getJwtFromRequest(request);
+            if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
+                String username = jwtTokenProvider.getUsername(jwt);
+                contextUtil.setUserName(username);
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+
+            filterChain.doFilter(request, response); // auditing xảy ra trong đoạn này
+        } finally {
+            contextUtil.clear(); // chỉ clear sau khi request hoàn tất
         }
-
-        // Lấy JWT từ header
-        String jwt = getJwtFromRequest(request);
-        log.info("Request {} {} JWT={}", method, path, jwt);
-
-        if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
-            String username = jwtTokenProvider.getUsername(jwt);
-            contextUtil.setUserName(username);
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            log.info("Authentication set for user={}", username);
-        } else {
-            log.info("No valid JWT, SecurityContext={}", SecurityContextHolder.getContext().getAuthentication());
-        }
-
-        // tiếp tục filter chain
-        filterChain.doFilter(request, response);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
